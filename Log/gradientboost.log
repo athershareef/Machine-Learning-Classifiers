@@ -1,0 +1,171 @@
+> control <- trainControl(method="repeatedcv", number=10, repeats=33)
+> gradientboost <- train(as.factor(Donated) ~ ., data = prtrain, method = "gbm", trControl = control,verbose = FALSE, tuneGrid=data.frame(n.trees = 100, interaction.depth = 1, shrinkage = 0.1 , n.minobsinnode = 10 ))
+> print(gradientboost)
+Stochastic Gradient Boosting 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 471, 470, 471, 471, 471, 471, ... 
+Resampling results:
+
+  Accuracy  Kappa
+  0.781     0.205
+
+Tuning parameter 'n.trees' was held constant at a value of 100
+Tuning parameter 'interaction.depth' was held constant at a value of
+ 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode' was held constant at a value of 10
+ 
+> predicted_gb= predict(gradientboost,prtest)
+> confusionMatrix(predicted_gb,prtest$Donated)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 162  48
+         1   5  10
+                                        
+               Accuracy : 0.764         
+                 95% CI : (0.703, 0.818)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.249         
+                                        
+                  Kappa : 0.188         
+ Mcnemar's Test P-Value : 7.97e-09      
+                                        
+            Sensitivity : 0.970         
+            Specificity : 0.172         
+         Pos Pred Value : 0.771         
+         Neg Pred Value : 0.667         
+             Prevalence : 0.742         
+         Detection Rate : 0.720         
+   Detection Prevalence : 0.933         
+      Balanced Accuracy : 0.571         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCgb<-roc(prtest$Donated,as.numeric(predicted_gb))
+> aucgb<-auc(ROCgb)
+> aucgb
+Area under the curve: 0.571
+> plot(ROCgb)
+
+
+> control <- trainControl(method="repeatedcv", number=10, repeats=33)
+> gradientboost <- train(as.factor(Donated) ~ ., data = prtrain, method = "gbm", trControl = control,verbose = FALSE, tuneGrid=data.frame(n.trees = 300, interaction.depth = 1, shrinkage = 0.1 , n.minobsinnode = 10 ))
+> print(gradientboost)
+Stochastic Gradient Boosting 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 471, 471, 471, 470, 471, 471, ... 
+Resampling results:
+
+  Accuracy  Kappa
+  0.783     0.246
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant at a value of
+ 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode' was held constant at a value of 10
+ 
+> predicted_gb= predict(gradientboost,prtest)
+> confusionMatrix(predicted_gb,prtest$Donated)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 161  44
+         1   6  14
+                                       
+               Accuracy : 0.778        
+                 95% CI : (0.718, 0.83)
+    No Information Rate : 0.742        
+    P-Value [Acc > NIR] : 0.126        
+                                       
+                  Kappa : 0.261        
+ Mcnemar's Test P-Value : 1.67e-07     
+                                       
+            Sensitivity : 0.964        
+            Specificity : 0.241        
+         Pos Pred Value : 0.785        
+         Neg Pred Value : 0.700        
+             Prevalence : 0.742        
+         Detection Rate : 0.716        
+   Detection Prevalence : 0.911        
+      Balanced Accuracy : 0.603        
+                                       
+       'Positive' Class : 0            
+                                       
+> ROCgb<-roc(prtest$Donated,as.numeric(predicted_gb))
+> aucgb<-auc(ROCgb)
+> aucgb
+Area under the curve: 0.603
+> plot(ROCgb)
+
+> control <- trainControl(method="repeatedcv", number=10, repeats=33)
+> gradientboost <- train(as.factor(Donated) ~ ., data = prtrain, method = "gbm", trControl = control,verbose = FALSE, tuneGrid=data.frame(n.trees = 500, interaction.depth = 1, shrinkage = 0.1 , n.minobsinnode = 10 ))
+> print(gradientboost)
+Stochastic Gradient Boosting 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 470, 471, 471, 471, 470, 471, ... 
+Resampling results:
+
+  Accuracy  Kappa
+  0.783     0.253
+
+Tuning parameter 'n.trees' was held constant at a value of 500
+Tuning parameter 'interaction.depth' was held constant at a value of
+ 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode' was held constant at a value of 10
+ 
+> predicted_gb= predict(gradientboost,prtest)
+> confusionMatrix(predicted_gb,prtest$Donated)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 154  43
+         1  13  15
+                                        
+               Accuracy : 0.751         
+                 95% CI : (0.689, 0.806)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.414178      
+                                        
+                  Kappa : 0.217         
+ Mcnemar's Test P-Value : 0.000106      
+                                        
+            Sensitivity : 0.922         
+            Specificity : 0.259         
+         Pos Pred Value : 0.782         
+         Neg Pred Value : 0.536         
+             Prevalence : 0.742         
+         Detection Rate : 0.684         
+   Detection Prevalence : 0.876         
+      Balanced Accuracy : 0.590         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCgb<-roc(prtest$Donated,as.numeric(predicted_gb))
+> aucgb<-auc(ROCgb)
+> aucgb
+Area under the curve: 0.59
+> plot(ROCgb)

@@ -1,0 +1,250 @@
+naive = train(as.factor(Donated) ~., data=prtrain, 'nb',trControl=trainControl(method='repeatedcv',number=3), tuneGrid=data.frame(fL= 2, usekernel=TRUE, adjust=TRUE))
+> print(naive)
+Naive Bayes 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 349, 348, 349 
+Resampling results:
+
+  Accuracy  Kappa
+  0.755     0.227
+
+Tuning parameter 'fL' was held constant at a value of 2
+Tuning parameter 'usekernel' was held constant at a value of TRUE
+Tuning
+ parameter 'adjust' was held constant at a value of TRUE
+ 
+> predicted_naive= predict(naive,prtest)
+> confusionMatrix(predicted_naive,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 140  32
+         1  27  26
+                                        
+               Accuracy : 0.738         
+                 95% CI : (0.675, 0.794)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.595         
+                                        
+                  Kappa : 0.295         
+ Mcnemar's Test P-Value : 0.603         
+                                        
+            Sensitivity : 0.838         
+            Specificity : 0.448         
+         Pos Pred Value : 0.814         
+         Neg Pred Value : 0.491         
+             Prevalence : 0.742         
+         Detection Rate : 0.622         
+   Detection Prevalence : 0.764         
+      Balanced Accuracy : 0.643         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCn<-roc(prtest$Donated,as.numeric(predicted_naive))
+> plot(ROCn)
+> aucn<-auc(ROCn)
+> aucn
+Area under the curve: 0.643
+> plot(ROCn)
+> 
+> 
+
+naive = train(as.factor(Donated) ~., data=prtrain, 'nb',trControl=trainControl(method='repeatedcv',number=3), tuneGrid=data.frame(fL= 3, usekernel=TRUE, adjust=TRUE))
+Warning message:
+In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 116
+> print(naive)
+Naive Bayes 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 349, 349, 348 
+Resampling results:
+
+  Accuracy  Kappa
+  0.74      0.244
+
+Tuning parameter 'fL' was held constant at a value of 3
+Tuning parameter 'usekernel' was held constant at a value of TRUE
+Tuning
+ parameter 'adjust' was held constant at a value of TRUE
+ 
+> predicted_naive= predict(naive,prtest)
+> confusionMatrix(predicted_naive,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 140  32
+         1  27  26
+                                        
+               Accuracy : 0.738         
+                 95% CI : (0.675, 0.794)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.595         
+                                        
+                  Kappa : 0.295         
+ Mcnemar's Test P-Value : 0.603         
+                                        
+            Sensitivity : 0.838         
+            Specificity : 0.448         
+         Pos Pred Value : 0.814         
+         Neg Pred Value : 0.491         
+             Prevalence : 0.742         
+         Detection Rate : 0.622         
+   Detection Prevalence : 0.764         
+      Balanced Accuracy : 0.643         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCn<-roc(prtest$Donated,as.numeric(predicted_naive))
+> plot(ROCn)
+> aucn<-auc(ROCn)
+> aucn
+Area under the curve: 0.643
+> plot(ROCn)
+> 
+
+> naive = train(as.factor(Donated) ~., data=prtrain, 'nb',trControl=trainControl(method='repeatedcv',number=3), tuneGrid=data.frame(fL= 1, usekernel=FALSE, adjust=TRUE))
+Warning messages:
+1: In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 49
+2: In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 112
+3: In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 147
+4: In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 5
+5: In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 71
+6: In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 33
+> print(naive)
+Naive Bayes 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 349, 348, 349 
+Resampling results:
+
+  Accuracy  Kappa
+  0.771     0.18 
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of FALSE
+
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+> predicted_naive= predict(naive,prtest)
+Warning messages:
+1: In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 2
+2: In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 95
+> confusionMatrix(predicted_naive,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 158  51
+         1   9   7
+                                      
+               Accuracy : 0.733       
+                 95% CI : (0.67, 0.79)
+    No Information Rate : 0.742       
+    P-Value [Acc > NIR] : 0.652       
+                                      
+                  Kappa : 0.087       
+ Mcnemar's Test P-Value : 1.2e-07     
+                                      
+            Sensitivity : 0.946       
+            Specificity : 0.121       
+         Pos Pred Value : 0.756       
+         Neg Pred Value : 0.438       
+             Prevalence : 0.742       
+         Detection Rate : 0.702       
+   Detection Prevalence : 0.929       
+      Balanced Accuracy : 0.533       
+                                      
+       'Positive' Class : 0           
+                                      
+> ROCn<-roc(prtest$Donated,as.numeric(predicted_naive))
+> plot(ROCn)
+> aucn<-auc(ROCn)
+> aucn
+Area under the curve: 0.533
+> plot(ROCn)
+
+> naive = train(as.factor(Donated) ~., data=prtrain, 'nb',trControl=trainControl(method='repeatedcv',number=3), tuneGrid=data.frame(fL= 1, usekernel=TRUE, adjust=TRUE))
+Warning message:
+In FUN(X[[i]], ...) :
+  Numerical 0 probability for all classes with observation 108
+> print(naive)
+Naive Bayes 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 349, 348, 349 
+Resampling results:
+
+  Accuracy  Kappa
+  0.738     0.216
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of TRUE
+Tuning
+ parameter 'adjust' was held constant at a value of TRUE
+ 
+> predicted_naive= predict(naive,prtest)
+> confusionMatrix(predicted_naive,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 140  32
+         1  27  26
+                                        
+               Accuracy : 0.738         
+                 95% CI : (0.675, 0.794)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.595         
+                                        
+                  Kappa : 0.295         
+ Mcnemar's Test P-Value : 0.603         
+                                        
+            Sensitivity : 0.838         
+            Specificity : 0.448         
+         Pos Pred Value : 0.814         
+         Neg Pred Value : 0.491         
+             Prevalence : 0.742         
+         Detection Rate : 0.622         
+   Detection Prevalence : 0.764         
+      Balanced Accuracy : 0.643         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCn<-roc(prtest$Donated,as.numeric(predicted_naive))
+> plot(ROCn)
+> aucn<-auc(ROCn)
+> aucn
+Area under the curve: 0.643
+> plot(ROCn)

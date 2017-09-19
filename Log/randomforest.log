@@ -1,0 +1,162 @@
+> control <- trainControl(method="repeatedcv", number=10, repeats=3, search="random")
+> randomforest<- train(as.factor(Donated) ~., data=prtrain, method="rf",  trControl=control, ntree=10)
+> print(randomforest)
+Random Forest 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 471, 471, 470, 471, 471, 470, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy  Kappa
+  1     0.765     0.236
+  3     0.736     0.193
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+> predicted_randomforest= (predict(randomforest,prtest))
+> confusionMatrix(predicted_randomforest,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 154  39
+         1  13  19
+                                        
+               Accuracy : 0.769         
+                 95% CI : (0.708, 0.822)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.201977      
+                                        
+                  Kappa : 0.293         
+ Mcnemar's Test P-Value : 0.000527      
+                                        
+            Sensitivity : 0.922         
+            Specificity : 0.328         
+         Pos Pred Value : 0.798         
+         Neg Pred Value : 0.594         
+             Prevalence : 0.742         
+         Detection Rate : 0.684         
+   Detection Prevalence : 0.858         
+      Balanced Accuracy : 0.625         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCrf<-roc(prtest$Donated,as.numeric(predicted_randomforest))
+> aucrf<-auc(ROCrf)
+> aucrf
+Area under the curve: 0.625
+> plot(ROCrf)
+> 
+
+> control <- trainControl(method="repeatedcv", number=10, repeats=3, search="random")
+> randomforest<- train(as.factor(Donated) ~., data=prtrain, method="rf",  trControl=control, ntree=20)
+> print(randomforest)
+Random Forest 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 471, 471, 471, 471, 470, 471, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy  Kappa
+  1     0.778     0.252
+  3     0.736     0.206
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+> predicted_randomforest= (predict(randomforest,prtest))
+> confusionMatrix(predicted_randomforest,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 158  41
+         1   9  17
+                                       
+               Accuracy : 0.778        
+                 95% CI : (0.718, 0.83)
+    No Information Rate : 0.742        
+    P-Value [Acc > NIR] : 0.126        
+                                       
+                  Kappa : 0.292        
+ Mcnemar's Test P-Value : 1.16e-05     
+                                       
+            Sensitivity : 0.946        
+            Specificity : 0.293        
+         Pos Pred Value : 0.794        
+         Neg Pred Value : 0.654        
+             Prevalence : 0.742        
+         Detection Rate : 0.702        
+   Detection Prevalence : 0.884        
+      Balanced Accuracy : 0.620        
+                                       
+       'Positive' Class : 0            
+                                       
+> ROCrf<-roc(prtest$Donated,as.numeric(predicted_randomforest))
+> aucrf<-auc(ROCrf)
+> aucrf
+Area under the curve: 0.62
+> plot(ROCrf)
+
+> control <- trainControl(method="repeatedcv", number=10, repeats=3, search="random")
+> randomforest<- train(as.factor(Donated) ~., data=prtrain, method="rf",  trControl=control, ntree=50)
+> print(randomforest)
+Random Forest 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 470, 471, 471, 471, 471, 470, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy  Kappa
+  2     0.742     0.195
+  3     0.741     0.210
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 2. 
+> predicted_randomforest= (predict(randomforest,prtest))
+> confusionMatrix(predicted_randomforest,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 151  43
+         1  16  15
+                                        
+               Accuracy : 0.738         
+                 95% CI : (0.675, 0.794)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.594913      
+                                        
+                  Kappa : 0.192         
+ Mcnemar's Test P-Value : 0.000712      
+                                        
+            Sensitivity : 0.904         
+            Specificity : 0.259         
+         Pos Pred Value : 0.778         
+         Neg Pred Value : 0.484         
+             Prevalence : 0.742         
+         Detection Rate : 0.671         
+   Detection Prevalence : 0.862         
+      Balanced Accuracy : 0.581         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCrf<-roc(prtest$Donated,as.numeric(predicted_randomforest))
+> aucrf<-auc(ROCrf)
+> aucrf
+Area under the curve: 0.581
+> plot(ROCrf)

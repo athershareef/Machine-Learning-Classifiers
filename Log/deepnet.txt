@@ -1,0 +1,129 @@
+Deep network:
+
+> #Writing Formula as default formula doesnt work with neuralnet package
+>       n <- names(train)
+>       f <- as.formula(paste("Donated ~", paste(n[!n %in% "Donated"], collapse = " + ")))      
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       #Pass list for Deep network
+>       
+>       deep <- neuralnet(f, data=train, hidden=c(3,5),linear.output=FALSE)
+>       
+>       predict.deep<-compute(deep,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.deep$net.result>0.2
+>       predict.deep.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.deep.vals,test$Donated)
+>       accuracy.deep<-con$overall
+>       accuracy.deep
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.deep<-roc(test$Donated,as.numeric(predict.deep.vals))
+>       plot(ROC.deep, col = "red")
+>       auc.deep<-auc(ROC.deep)
+>       auc.deep
+Area under the curve: 0.6276069
+>       plot(deep)
+> #Writing Formula as default formula doesnt work with neuralnet package
+>       n <- names(train)
+>       f <- as.formula(paste("Donated ~", paste(n[!n %in% "Donated"], collapse = " + ")))      
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       #Pass list for Deep network
+>       
+>       deep <- neuralnet(f, data=train, hidden=c(3,2,2,2),linear.output=FALSE)
+>       
+>       predict.deep<-compute(deep,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.deep$net.result>0.2
+>       predict.deep.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.deep.vals,test$Donated)
+>       accuracy.deep<-con$overall
+>       accuracy.deep
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.deep<-roc(test$Donated,as.numeric(predict.deep.vals))
+>       plot(ROC.deep, col = "red")
+>       auc.deep<-auc(ROC.deep)
+>       auc.deep
+Area under the curve: 0.6789696
+>       plot(deep)
+> #Writing Formula as default formula doesnt work with neuralnet package
+>       n <- names(train)
+>       f <- as.formula(paste("Donated ~", paste(n[!n %in% "Donated"], collapse = " + ")))      
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       #Pass list for Deep network
+>       
+>       deep <- neuralnet(f, data=train, hidden=c(3,2,2,2),linear.output=FALSE)
+
+> #Writing Formula as default formula doesnt work with neuralnet package
+>       n <- names(train)
+>       f <- as.formula(paste("Donated ~", paste(n[!n %in% "Donated"], collapse = " + ")))      
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       #Pass list for Deep network
+>       
+>       deep <- neuralnet(f, data=train, hidden=c(3,2,2,2),linear.output=FALSE)
+>       
+>       predict.deep<-compute(deep,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.deep$net.result>0.2
+>       predict.deep.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.deep.vals,test$Donated)
+>       accuracy.deep<-con$overall
+>       accuracy.deep
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.deep<-roc(test$Donated,as.numeric(predict.deep.vals))
+>       plot(ROC.deep, col = "red")
+>       auc.deep<-auc(ROC.deep)
+>       auc.deep
+Area under the curve: 0.7033863
+>       plot(deep)

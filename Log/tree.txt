@@ -1,0 +1,178 @@
+> mytree<-rpart(train$Donated~., data=train, method = "class")
+>       ptree<- prune(mytree, cp=0.02)
+>       
+>       #Display Tree
+>       fancyRpartPlot(mytree)
+>       fancyRpartPlot(ptree)
+>       
+>       # Make predictions on the test set
+>       predict.dtree <- predict(mytree, newdata = test, type = "class")
+>       predict.dtree.prune <- predict(ptree, newdata = test, type = "class")
+>       
+>       #Use caret's confusion matrix
+>       conTree<-confusionMatrix(predict.dtree,test$Donated)
+>       conTreePrune<-confusionMatrix(predict.dtree.prune,test$Donated)
+>       
+>       
+>       #Accuracy and Confusion Matrix
+>       conTree
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 161  46
+         1   6  12
+                                          
+               Accuracy : 0.7689          
+                 95% CI : (0.7082, 0.8223)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.202           
+                                          
+                  Kappa : 0.2206          
+ Mcnemar's Test P-Value : 6.362e-08       
+                                          
+            Sensitivity : 0.9641          
+            Specificity : 0.2069          
+         Pos Pred Value : 0.7778          
+         Neg Pred Value : 0.6667          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7156          
+   Detection Prevalence : 0.9200          
+      Balanced Accuracy : 0.5855          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.dtree<-roc(test$Donated,as.numeric(predict.dtree))
+>       plot(ROC.dtree, col = "blue",print.auc=TRUE)
+>       auc.dtree<-auc(ROC.dtree)
+>       auc.dtree
+Area under the curve: 0.5855
+>       
+>       #Accuracy and Confusion Matrix
+>       conTreePrune
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 154  36
+         1  13  22
+                                          
+               Accuracy : 0.7822          
+                 95% CI : (0.7225, 0.8343)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.095970        
+                                          
+                  Kappa : 0.3463          
+ Mcnemar's Test P-Value : 0.001673        
+                                          
+            Sensitivity : 0.9222          
+            Specificity : 0.3793          
+         Pos Pred Value : 0.8105          
+         Neg Pred Value : 0.6286          
+             Prevalence : 0.7422          
+         Detection Rate : 0.6844          
+   Detection Prevalence : 0.8444          
+      Balanced Accuracy : 0.6507          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.dtree.prune<-roc(test$Donated,as.numeric(predict.dtree.prune))
+>       plot(ROC.dtree.prune, col = "blue",print.auc=TRUE)
+>       auc.dtree.prune<-auc(ROC.dtree.prune)
+>       auc.dtree.prune
+Area under the curve: 0.6507
+> mytree<-rpart(train$Donated~., data=train, method = "class")
+>       ptree<- prune(mytree, cp=0.01)
+>       
+>       #Display Tree
+>       fancyRpartPlot(mytree)
+>       fancyRpartPlot(ptree)
+>       
+>       # Make predictions on the test set
+>       predict.dtree <- predict(mytree, newdata = test, type = "class")
+>       predict.dtree.prune <- predict(ptree, newdata = test, type = "class")
+>       
+>       #Use caret's confusion matrix
+>       conTree<-confusionMatrix(predict.dtree,test$Donated)
+>       conTreePrune<-confusionMatrix(predict.dtree.prune,test$Donated)
+>       
+>       
+>       #Accuracy and Confusion Matrix
+>       conTree
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 161  46
+         1   6  12
+                                          
+               Accuracy : 0.7689          
+                 95% CI : (0.7082, 0.8223)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.202           
+                                          
+                  Kappa : 0.2206          
+ Mcnemar's Test P-Value : 6.362e-08       
+                                          
+            Sensitivity : 0.9641          
+            Specificity : 0.2069          
+         Pos Pred Value : 0.7778          
+         Neg Pred Value : 0.6667          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7156          
+   Detection Prevalence : 0.9200          
+      Balanced Accuracy : 0.5855          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.dtree<-roc(test$Donated,as.numeric(predict.dtree))
+>       plot(ROC.dtree, col = "blue",print.auc=TRUE)
+>       auc.dtree<-auc(ROC.dtree)
+>       auc.dtree
+Area under the curve: 0.5855
+>       
+>       #Accuracy and Confusion Matrix
+>       conTreePrune
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 161  46
+         1   6  12
+                                          
+               Accuracy : 0.7689          
+                 95% CI : (0.7082, 0.8223)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.202           
+                                          
+                  Kappa : 0.2206          
+ Mcnemar's Test P-Value : 6.362e-08       
+                                          
+            Sensitivity : 0.9641          
+            Specificity : 0.2069          
+         Pos Pred Value : 0.7778          
+         Neg Pred Value : 0.6667          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7156          
+   Detection Prevalence : 0.9200          
+      Balanced Accuracy : 0.5855          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.dtree.prune<-roc(test$Donated,as.numeric(predict.dtree.prune))
+>       plot(ROC.dtree.prune, col = "blue",print.auc=TRUE)
+>       auc.dtree.prune<-auc(ROC.dtree.prune)
+>       auc.dtree.prune
+Area under the curve: 0.5855

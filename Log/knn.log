@@ -1,0 +1,159 @@
+> knn = train(as.factor(Donated) ~., data=prtrain,method='knn',trControl=trainControl(method='repeatedcv',number=3),tuneGrid=data.frame(k=10))
+> print(knn)
+k-Nearest Neighbors 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 349, 348, 349 
+Resampling results:
+
+  Accuracy  Kappa
+  0.78      0.254
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+> predicted_knn= predict(knn,prtest)
+> confusionMatrix(predicted_knn,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 161  42
+         1   6  16
+                                        
+               Accuracy : 0.787         
+                 95% CI : (0.727, 0.838)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.0717        
+                                        
+                  Kappa : 0.301         
+ Mcnemar's Test P-Value : 4.38e-07      
+                                        
+            Sensitivity : 0.964         
+            Specificity : 0.276         
+         Pos Pred Value : 0.793         
+         Neg Pred Value : 0.727         
+             Prevalence : 0.742         
+         Detection Rate : 0.716         
+   Detection Prevalence : 0.902         
+      Balanced Accuracy : 0.620         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCknn<-roc(prtest$Donated,as.numeric(predicted_knn))
+> plot(ROCknn)
+> aucknn<-auc(ROCknn)
+> aucknn
+Area under the curve: 0.62
+> plot(ROCknn)
+
+> knn = train(as.factor(Donated) ~., data=prtrain,method='knn',trControl=trainControl(method='repeatedcv',number=3),tuneGrid=data.frame(k=5))
+> print(knn)
+k-Nearest Neighbors 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 348, 349, 349 
+Resampling results:
+
+  Accuracy  Kappa
+  0.759     0.18 
+
+Tuning parameter 'k' was held constant at a value of 5
+ 
+> predicted_knn= predict(knn,prtest)
+> confusionMatrix(predicted_knn,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 152  38
+         1  15  20
+                                        
+               Accuracy : 0.764         
+                 95% CI : (0.703, 0.818)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.24851       
+                                        
+                  Kappa : 0.293         
+ Mcnemar's Test P-Value : 0.00251       
+                                        
+            Sensitivity : 0.910         
+            Specificity : 0.345         
+         Pos Pred Value : 0.800         
+         Neg Pred Value : 0.571         
+             Prevalence : 0.742         
+         Detection Rate : 0.676         
+   Detection Prevalence : 0.844         
+      Balanced Accuracy : 0.628         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCknn<-roc(prtest$Donated,as.numeric(predicted_knn))
+> plot(ROCknn)
+> aucknn<-auc(ROCknn)
+> aucknn
+Area under the curve: 0.628
+> plot(ROCknn)
+
+
+> knn = train(as.factor(Donated) ~., data=prtrain,method='knn',trControl=trainControl(method='repeatedcv',number=3),tuneGrid=data.frame(k=11))
+> print(knn)
+k-Nearest Neighbors 
+
+523 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 348, 349, 349 
+Resampling results:
+
+  Accuracy  Kappa
+  0.759     0.173
+
+Tuning parameter 'k' was held constant at a value of 11
+ 
+> predicted_knn= predict(knn,prtest)
+> confusionMatrix(predicted_knn,as.factor(prtest$Donated))
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 159  41
+         1   8  17
+                                        
+               Accuracy : 0.782         
+                 95% CI : (0.723, 0.834)
+    No Information Rate : 0.742         
+    P-Value [Acc > NIR] : 0.096         
+                                        
+                  Kappa : 0.301         
+ Mcnemar's Test P-Value : 4.84e-06      
+                                        
+            Sensitivity : 0.952         
+            Specificity : 0.293         
+         Pos Pred Value : 0.795         
+         Neg Pred Value : 0.680         
+             Prevalence : 0.742         
+         Detection Rate : 0.707         
+   Detection Prevalence : 0.889         
+      Balanced Accuracy : 0.623         
+                                        
+       'Positive' Class : 0             
+                                        
+> ROCknn<-roc(prtest$Donated,as.numeric(predicted_knn))
+> plot(ROCknn)
+> aucknn<-auc(ROCknn)
+> aucknn
+Area under the curve: 0.623
+> plot(ROCknn)

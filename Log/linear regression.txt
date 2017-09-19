@@ -1,0 +1,314 @@
+Area under the curve: 0.5
+>       ROC.psvm<-roc(test$Donated,as.numeric(predict.psvm))
+>       plot(ROC.psvm, col = "red",print.auc=TRUE)
+>       auc.psvm<-auc(ROC.psvm)
+>       auc.psvm
+Area under the curve: 0.62
+> glm <- train(x,y, method="glm",trControl=ctrl)
+>       
+>       predict.glm<-predict(glm,test[1:3])
+> 
+>       #Use caret's confusion matrix
+>       
+>       conGLM<-confusionMatrix(predict.glm,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conGLM
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 163  52
+         1   4   6
+                                          
+               Accuracy : 0.7511          
+                 95% CI : (0.6893, 0.8062)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.4142          
+                                          
+                  Kappa : 0.1089          
+ Mcnemar's Test P-Value : 3.372e-10       
+                                          
+            Sensitivity : 0.9760          
+            Specificity : 0.1034          
+         Pos Pred Value : 0.7581          
+         Neg Pred Value : 0.6000          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7244          
+   Detection Prevalence : 0.9556          
+      Balanced Accuracy : 0.5397          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.glm<-roc(test$Donated,as.numeric(predict.glm))
+>       plot(ROC.glm, col = "red",print.auc=TRUE)
+>       auc.glm<-auc(ROC.glm)
+>       auc.glm
+Area under the curve: 0.5397
+> glm <- train(x,y, method="glm",trControl=ctrl)
+>       
+>       predict.glm<-predict(glm,test[1:3])
+> 
+>       #Use caret's confusion matrix
+>       
+>       conGLM<-confusionMatrix(predict.glm,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conGLM
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 163  52
+         1   4   6
+                                          
+               Accuracy : 0.7511          
+                 95% CI : (0.6893, 0.8062)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.4142          
+                                          
+                  Kappa : 0.1089          
+ Mcnemar's Test P-Value : 3.372e-10       
+                                          
+            Sensitivity : 0.9760          
+            Specificity : 0.1034          
+         Pos Pred Value : 0.7581          
+         Neg Pred Value : 0.6000          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7244          
+   Detection Prevalence : 0.9556          
+      Balanced Accuracy : 0.5397          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.glm<-roc(test$Donated,as.numeric(predict.glm))
+>       plot(ROC.glm, col = "red",print.auc=TRUE)
+>       auc.glm<-auc(ROC.glm)
+>       auc.glm
+Area under the curve: 0.5397
+> glm <- train(x,y, method="glm",trControl=ctrl)
+>       
+>       predict.glm<-predict(glm,test[1:3])
+> 
+>       #Use caret's confusion matrix
+>       
+>       conGLM<-confusionMatrix(predict.glm,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conGLM
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 163  52
+         1   4   6
+                                          
+               Accuracy : 0.7511          
+                 95% CI : (0.6893, 0.8062)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.4142          
+                                          
+                  Kappa : 0.1089          
+ Mcnemar's Test P-Value : 3.372e-10       
+                                          
+            Sensitivity : 0.9760          
+            Specificity : 0.1034          
+         Pos Pred Value : 0.7581          
+         Neg Pred Value : 0.6000          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7244          
+   Detection Prevalence : 0.9556          
+      Balanced Accuracy : 0.5397          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.glm<-roc(test$Donated,as.numeric(predict.glm))
+>       plot(ROC.glm, col = "red",print.auc=TRUE)
+>       auc.glm<-auc(ROC.glm)
+>       auc.glm
+Area under the curve: 0.5397
+> glm <- train(x,y, method="glm",trControl=ctrl)
+>       
+>       predict.glm<-predict(glm,test[1:3])
+> 
+>       #Use caret's confusion matrix
+>       
+>       conGLM<-confusionMatrix(predict.glm,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conGLM
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 163  52
+         1   4   6
+                                          
+               Accuracy : 0.7511          
+                 95% CI : (0.6893, 0.8062)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.4142          
+                                          
+                  Kappa : 0.1089          
+ Mcnemar's Test P-Value : 3.372e-10       
+                                          
+            Sensitivity : 0.9760          
+            Specificity : 0.1034          
+         Pos Pred Value : 0.7581          
+         Neg Pred Value : 0.6000          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7244          
+   Detection Prevalence : 0.9556          
+      Balanced Accuracy : 0.5397          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.glm<-roc(test$Donated,as.numeric(predict.glm))
+>       plot(ROC.glm, col = "red",print.auc=TRUE)
+>       auc.glm<-auc(ROC.glm)
+>       auc.glm
+Area under the curve: 0.5397
+> glm <- train(x,y, method="glm",trControl=ctrl)
+>       
+>       predict.glm<-predict(glm,test[1:3])
+> 
+>       #Use caret's confusion matrix
+>       
+>       conGLM<-confusionMatrix(predict.glm,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conGLM
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 163  52
+         1   4   6
+                                          
+               Accuracy : 0.7511          
+                 95% CI : (0.6893, 0.8062)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.4142          
+                                          
+                  Kappa : 0.1089          
+ Mcnemar's Test P-Value : 3.372e-10       
+                                          
+            Sensitivity : 0.9760          
+            Specificity : 0.1034          
+         Pos Pred Value : 0.7581          
+         Neg Pred Value : 0.6000          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7244          
+   Detection Prevalence : 0.9556          
+      Balanced Accuracy : 0.5397          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.glm<-roc(test$Donated,as.numeric(predict.glm))
+>       plot(ROC.glm, col = "red",print.auc=TRUE)
+>       auc.glm<-auc(ROC.glm)
+>       auc.glm
+Area under the curve: 0.5397
+> glm <- train(x,y, method="glm",trControl=ctrl)
+>       
+>       predict.glm<-predict(glm,test[1:3])
+> 
+>       #Use caret's confusion matrix
+>       
+>       conGLM<-confusionMatrix(predict.glm,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conGLM
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 163  52
+         1   4   6
+                                          
+               Accuracy : 0.7511          
+                 95% CI : (0.6893, 0.8062)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.4142          
+                                          
+                  Kappa : 0.1089          
+ Mcnemar's Test P-Value : 3.372e-10       
+                                          
+            Sensitivity : 0.9760          
+            Specificity : 0.1034          
+         Pos Pred Value : 0.7581          
+         Neg Pred Value : 0.6000          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7244          
+   Detection Prevalence : 0.9556          
+      Balanced Accuracy : 0.5397          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.glm<-roc(test$Donated,as.numeric(predict.glm))
+>       plot(ROC.glm, col = "red",print.auc=TRUE)
+>       auc.glm<-auc(ROC.glm)
+>       auc.glm
+Area under the curve: 0.5397
+> glm <- train(x,y, method="glm",trControl=ctrl)
+>       
+>       predict.glm<-predict(glm,test[1:3])
+> 
+>       #Use caret's confusion matrix
+>       
+>       conGLM<-confusionMatrix(predict.glm,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conGLM
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 163  52
+         1   4   6
+                                          
+               Accuracy : 0.7511          
+                 95% CI : (0.6893, 0.8062)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.4142          
+                                          
+                  Kappa : 0.1089          
+ Mcnemar's Test P-Value : 3.372e-10       
+                                          
+            Sensitivity : 0.9760          
+            Specificity : 0.1034          
+         Pos Pred Value : 0.7581          
+         Neg Pred Value : 0.6000          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7244          
+   Detection Prevalence : 0.9556          
+      Balanced Accuracy : 0.5397          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.glm<-roc(test$Donated,as.numeric(predict.glm))
+>       plot(ROC.glm, col = "red",print.auc=TRUE)
+>       auc.glm<-auc(ROC.glm)
+>       auc.glm
+Area under the curve: 0.5397

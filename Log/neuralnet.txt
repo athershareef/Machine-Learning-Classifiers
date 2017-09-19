@@ -1,0 +1,239 @@
+> #Neural Net
+>       
+>       names(train) <- c("R","Fa","B","T","Don")
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       net <- neuralnet(Don~R+Fa+B+T, data=train, hidden=4,linear.output=FALSE)
+>       plot(net)
+>       
+>       predict.nnet<-compute(net,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.nnet$net.result>0.6
+>       predict.nnet.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.nnet.vals,test$Donated)
+>       accuracy.nnet<-con$overall
+>       accuracy.nnet
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.nnet<-roc(test$Donated,as.numeric(predict.nnet.vals))
+>       plot(ROC.nnet, col = "red")
+>       auc.nnet<-auc(ROC.nnet)
+>       auc.nnet
+Area under the curve: 0.5941049
+> vals<- predict.nnet$net.result>0.9
+> names(train) <- c("R","Fa","B","T","Don")
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       net <- neuralnet(Don~R+Fa+B+T, data=train, hidden=4,linear.output=FALSE)
+>       plot(net)
+>       
+>       predict.nnet<-compute(net,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.nnet$net.result>0.9
+>       predict.nnet.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.nnet.vals,test$Donated)
+>       accuracy.nnet<-con$overall
+>       accuracy.nnet
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.nnet<-roc(test$Donated,as.numeric(predict.nnet.vals))
+>       plot(ROC.nnet, col = "red")
+>       auc.nnet<-auc(ROC.nnet)
+> names(train) <- c("R","Fa","B","T","Don")
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       net <- neuralnet(Don~R+Fa+B+T, data=train, hidden=4,linear.output=FALSE)
+>       plot(net)
+>       
+>       predict.nnet<-compute(net,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.nnet$net.result>0.7
+>       predict.nnet.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.nnet.vals,test$Donated)
+>       accuracy.nnet<-con$overall
+>       accuracy.nnet
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.nnet<-roc(test$Donated,as.numeric(predict.nnet.vals))
+>       plot(ROC.nnet, col = "red")
+>       auc.nnet<-auc(ROC.nnet)
+>       auc.nnet
+Area under the curve: 0.5626161
+> names(train) <- c("R","Fa","B","T","Don")
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       net <- neuralnet(Don~R+Fa+B+T, data=train, hidden=4,linear.output=FALSE)
+>       plot(net)
+>       
+>       predict.nnet<-compute(net,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.nnet$net.result>0.5
+>       predict.nnet.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.nnet.vals,test$Donated)
+>       accuracy.nnet<-con$overall
+>       accuracy.nnet
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.nnet<-roc(test$Donated,as.numeric(predict.nnet.vals))
+>       plot(ROC.nnet, col = "red")
+>       auc.nnet<-auc(ROC.nnet)
+>       auc.nnet
+Area under the curve: 0.5967376
+> names(train) <- c("R","Fa","B","T","Don")
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       net <- neuralnet(Don~R+Fa+B+T, data=train, hidden=4,linear.output=FALSE)
+>       plot(net)
+>       
+>       predict.nnet<-compute(net,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.nnet$net.result>0.3
+>       predict.nnet.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.nnet.vals,test$Donated)
+>       accuracy.nnet<-con$overall
+>       accuracy.nnet
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.nnet<-roc(test$Donated,as.numeric(predict.nnet.vals))
+>       plot(ROC.nnet, col = "red")
+>       auc.nnet<-auc(ROC.nnet)
+>       auc.nnet
+Area under the curve: 0.7040058
+> names(train) <- c("R","Fa","B","T","Don")
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       net <- neuralnet(Don~R+Fa+B+T, data=train, hidden=4,linear.output=FALSE)
+>       plot(net)
+>       
+>       predict.nnet<-compute(net,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.nnet$net.result>0.2
+>       predict.nnet.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.nnet.vals,test$Donated)
+>       accuracy.nnet<-con$overall
+>       accuracy.nnet
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.nnet<-roc(test$Donated,as.numeric(predict.nnet.vals))
+>       plot(ROC.nnet, col = "red")
+>       auc.nnet<-auc(ROC.nnet)
+>       auc.nnet
+Area under the curve: 0.676337
+> names(train) <- c("R","Fa","B","T","Don")
+>       
+>       # nn <- train(as.factor(Don)~., data = train, method = "nnet",trControl=trainControl(method='cv',number=10))
+>       # nn2 <- neuralnet(Don~R+Fa+T, data=x, linear.output=FALSE)
+>       # nn3<-train(as.factor(Don)~R+Fa+B+T, data=train, method="nnet",linear.output=FALSE)
+>       # predict<- compute(nn, test)
+>       
+>       net <- neuralnet(Don~R+Fa+B+T, data=train, hidden=4,linear.output=FALSE)
+>       plot(net)
+>       
+>       predict.nnet<-compute(net,test[1:4])
+>       
+>       #extracting 1's and zeros
+>       
+>       vals<- predict.nnet$net.result>0.2
+>       predict.nnet.vals=ifelse(vals=="TRUE",1,0)
+>       
+>       #Use caret's confusion matrix
+>       
+>       conNeural<-confusionMatrix(predict.nnet.vals,test$Donated)
+>       accuracy.nnet<-con$overall
+>       accuracy.nnet
+           Accuracy               Kappa       AccuracyLower       AccuracyUpper        AccuracyNull      AccuracyPValue 
+0.76888888888888884 0.22062350119904056 0.70822985350958034 0.82231608481567364 0.74222222222222223 0.20197679993559006 
+      McnemarPValue 
+0.00000006361622641 
+>       
+>       #Area under ROC
+>       
+>       ROC.nnet<-roc(test$Donated,as.numeric(predict.nnet.vals))
+>       plot(ROC.nnet, col = "red")
+>       auc.nnet<-auc(ROC.nnet)
+>       auc.nnet
+Area under the curve: 0.7141751

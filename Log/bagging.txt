@@ -1,0 +1,288 @@
+> bag <- train(x,y, method="treebag",trControl=ctrl, control=rpart.control(maxdepth=25,cp=0.0010000,minsplit=20,xval=10),iter=100)
+>       
+>       predict.bag<-predict(bag,test[1:3])
+>       
+>       #Use caret's confusion matrix
+>       
+>       conBAG<-confusionMatrix(predict.bag,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conBAG
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 156  43
+         1  11  15
+                                          
+               Accuracy : 0.76            
+                 95% CI : (0.6987, 0.8143)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.3             
+                                          
+                  Kappa : 0.2351          
+ Mcnemar's Test P-Value : 2.459e-05       
+                                          
+            Sensitivity : 0.9341          
+            Specificity : 0.2586          
+         Pos Pred Value : 0.7839          
+         Neg Pred Value : 0.5769          
+             Prevalence : 0.7422          
+         Detection Rate : 0.6933          
+   Detection Prevalence : 0.8844          
+      Balanced Accuracy : 0.5964          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.bag<-roc(test$Donated,as.numeric(predict.bag))
+>       plot(ROC.bag, col = "red",print.auc=TRUE)
+>       auc.bag<-auc(ROC.bag)
+>       auc.bag
+Area under the curve: 0.5964
+> bag <- train(x,y, method="treebag",trControl=ctrl, control=rpart.control(maxdepth=25,cp=0.0010000,minsplit=20,xval=10),iter=100)
+>       
+>       predict.bag<-predict(bag,test[1:3])
+>       
+>       #Use caret's confusion matrix
+>       
+>       conBAG<-confusionMatrix(predict.bag,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conBAG
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 159  46
+         1   8  12
+                                          
+               Accuracy : 0.76            
+                 95% CI : (0.6987, 0.8143)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.3             
+                                          
+                  Kappa : 0.2022          
+ Mcnemar's Test P-Value : 4.777e-07       
+                                          
+            Sensitivity : 0.9521          
+            Specificity : 0.2069          
+         Pos Pred Value : 0.7756          
+         Neg Pred Value : 0.6000          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7067          
+   Detection Prevalence : 0.9111          
+      Balanced Accuracy : 0.5795          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.bag<-roc(test$Donated,as.numeric(predict.bag))
+>       plot(ROC.bag, col = "red",print.auc=TRUE)
+>       auc.bag<-auc(ROC.bag)
+>       auc.bag
+Area under the curve: 0.5795
+> bag <- train(x,y, method="treebag",trControl=ctrl, control=rpart.control(maxdepth=10,cp=0.0010000,minsplit=30,xval=10),iter=200)
+>       
+>       predict.bag<-predict(bag,test[1:3])
+>       
+>       #Use caret's confusion matrix
+>       
+>       conBAG<-confusionMatrix(predict.bag,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conBAG
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 158  46
+         1   9  12
+                                         
+               Accuracy : 0.7556         
+                 95% CI : (0.694, 0.8102)
+    No Information Rate : 0.7422         
+    P-Value [Acc > NIR] : 0.3556         
+                                         
+                  Kappa : 0.1932         
+ Mcnemar's Test P-Value : 1.208e-06      
+                                         
+            Sensitivity : 0.9461         
+            Specificity : 0.2069         
+         Pos Pred Value : 0.7745         
+         Neg Pred Value : 0.5714         
+             Prevalence : 0.7422         
+         Detection Rate : 0.7022         
+   Detection Prevalence : 0.9067         
+      Balanced Accuracy : 0.5765         
+                                         
+       'Positive' Class : 0              
+                                         
+>       
+>       #Area under ROC
+>       
+>       ROC.bag<-roc(test$Donated,as.numeric(predict.bag))
+>       plot(ROC.bag, col = "red",print.auc=TRUE)
+>       auc.bag<-auc(ROC.bag)
+>       auc.bag
+Area under the curve: 0.5765
+> bag <- train(x,y, method="treebag",trControl=ctrl, control=rpart.control(maxdepth=50,cp=0.0010000,minsplit=30,xval=10),iter=200)
+Something is wrong; all the Accuracy metric values are missing:
+    Accuracy       Kappa    
+ Min.   : NA   Min.   : NA  
+ 1st Qu.: NA   1st Qu.: NA  
+ Median : NA   Median : NA  
+ Mean   :NaN   Mean   :NaN  
+ 3rd Qu.: NA   3rd Qu.: NA  
+ Max.   : NA   Max.   : NA  
+ NA's   :1     NA's   :1    
+Error in train.default(x, y, method = "treebag", trControl = ctrl, control = rpart.control(maxdepth = 50,  : 
+  Stopping
+In addition: There were 29 warnings (use warnings() to see them)
+>       
+>       predict.bag<-predict(bag,test[1:3])
+>       
+>       #Use caret's confusion matrix
+>       
+>       conBAG<-confusionMatrix(predict.bag,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conBAG
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 158  46
+         1   9  12
+                                         
+               Accuracy : 0.7556         
+                 95% CI : (0.694, 0.8102)
+    No Information Rate : 0.7422         
+    P-Value [Acc > NIR] : 0.3556         
+                                         
+                  Kappa : 0.1932         
+ Mcnemar's Test P-Value : 1.208e-06      
+                                         
+            Sensitivity : 0.9461         
+            Specificity : 0.2069         
+         Pos Pred Value : 0.7745         
+         Neg Pred Value : 0.5714         
+             Prevalence : 0.7422         
+         Detection Rate : 0.7022         
+   Detection Prevalence : 0.9067         
+      Balanced Accuracy : 0.5765         
+                                         
+       'Positive' Class : 0              
+                                         
+>       
+>       #Area under ROC
+>       
+>       ROC.bag<-roc(test$Donated,as.numeric(predict.bag))
+>       plot(ROC.bag, col = "red",print.auc=TRUE)
+>       auc.bag<-auc(ROC.bag)
+>       auc.bag
+Area under the curve: 0.5765
+> bag <- train(x,y, method="treebag",trControl=ctrl, control=rpart.control(maxdepth=50,cp=0.0010000,minsplit=30,xval=5),iter=200)
+Something is wrong; all the Accuracy metric values are missing:
+    Accuracy       Kappa    
+ Min.   : NA   Min.   : NA  
+ 1st Qu.: NA   1st Qu.: NA  
+ Median : NA   Median : NA  
+ Mean   :NaN   Mean   :NaN  
+ 3rd Qu.: NA   3rd Qu.: NA  
+ Max.   : NA   Max.   : NA  
+ NA's   :1     NA's   :1    
+Error in train.default(x, y, method = "treebag", trControl = ctrl, control = rpart.control(maxdepth = 50,  : 
+  Stopping
+In addition: There were 29 warnings (use warnings() to see them)
+>       
+>       predict.bag<-predict(bag,test[1:3])
+>       
+>       #Use caret's confusion matrix
+>       
+>       conBAG<-confusionMatrix(predict.bag,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conBAG
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 158  46
+         1   9  12
+                                         
+               Accuracy : 0.7556         
+                 95% CI : (0.694, 0.8102)
+    No Information Rate : 0.7422         
+    P-Value [Acc > NIR] : 0.3556         
+                                         
+                  Kappa : 0.1932         
+ Mcnemar's Test P-Value : 1.208e-06      
+                                         
+            Sensitivity : 0.9461         
+            Specificity : 0.2069         
+         Pos Pred Value : 0.7745         
+         Neg Pred Value : 0.5714         
+             Prevalence : 0.7422         
+         Detection Rate : 0.7022         
+   Detection Prevalence : 0.9067         
+      Balanced Accuracy : 0.5765         
+                                         
+       'Positive' Class : 0              
+                                         
+>       
+>       #Area under ROC
+>       
+>       ROC.bag<-roc(test$Donated,as.numeric(predict.bag))
+>       plot(ROC.bag, col = "red",print.auc=TRUE)
+>       auc.bag<-auc(ROC.bag)
+>       auc.bag
+Area under the curve: 0.5765
+> bag <- train(x,y, method="treebag",trControl=ctrl, control=rpart.control(maxdepth=15,cp=0.0010000,minsplit=30,xval=5),iter=200)
+>       
+>       predict.bag<-predict(bag,test[1:3])
+>       
+>       #Use caret's confusion matrix
+>       
+>       conBAG<-confusionMatrix(predict.bag,test$Donated)
+>       #Accuracy and Confusion Matrix
+>       
+>       conBAG
+Confusion Matrix and Statistics
+
+          Reference
+Prediction   0   1
+         0 159  45
+         1   8  13
+                                          
+               Accuracy : 0.7644          
+                 95% CI : (0.7035, 0.8183)
+    No Information Rate : 0.7422          
+    P-Value [Acc > NIR] : 0.2485          
+                                          
+                  Kappa : 0.2226          
+ Mcnemar's Test P-Value : 7.615e-07       
+                                          
+            Sensitivity : 0.9521          
+            Specificity : 0.2241          
+         Pos Pred Value : 0.7794          
+         Neg Pred Value : 0.6190          
+             Prevalence : 0.7422          
+         Detection Rate : 0.7067          
+   Detection Prevalence : 0.9067          
+      Balanced Accuracy : 0.5881          
+                                          
+       'Positive' Class : 0               
+                                          
+>       
+>       #Area under ROC
+>       
+>       ROC.bag<-roc(test$Donated,as.numeric(predict.bag))
+>       plot(ROC.bag, col = "red",print.auc=TRUE)
+>       auc.bag<-auc(ROC.bag)
+>       auc.bag
+Area under the curve: 0.5881

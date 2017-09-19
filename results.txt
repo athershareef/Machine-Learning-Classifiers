@@ -1,0 +1,1334 @@
+#Libraries
+> library(corrplot)
+> library(caret)
+> library(pROC)
+> library(rpart)
+> library(rpart.plot)
+> library(RColorBrewer)
+> library(rattle)
+> library(plyr)
+> library(e1071)
+> library(neuralnet)
+> library(ipred)
+> library(kernlab)
+> library(klaR)
+> library(ada)
+> library(randomForest)
+> library(gbm)
+> library(DAAG)
+> 
+> #Loading data from data set URL - blood-transfusion dataset
+> transfusion <- read.csv(url("http://archive.ics.uci.edu/ml/machine-learning-databases/blood-transfusion/transfusion.data"))
+> 
+> names(transfusion) <- c("Recency (Months)","Frequency (times)","Blood Donated (cc)","Time (months)","Donated blood")
+> Donated<-transfusion$`Donated blood`
+> 
+> 
+> summary(transfusion)
+ Recency (Months)    Frequency (times)   Blood Donated (cc)  Time (months)      Donated blood      
+ Min.   : 0.000000   Min.   : 1.000000   Min.   :  250.000   Min.   : 2.00000   Min.   :0.0000000  
+ 1st Qu.: 2.750000   1st Qu.: 2.000000   1st Qu.:  500.000   1st Qu.:16.00000   1st Qu.:0.0000000  
+ Median : 7.000000   Median : 4.000000   Median : 1000.000   Median :28.00000   Median :0.0000000  
+ Mean   : 9.506684   Mean   : 5.514706   Mean   : 1378.676   Mean   :34.28209   Mean   :0.2379679  
+ 3rd Qu.:14.000000   3rd Qu.: 7.000000   3rd Qu.: 1750.000   3rd Qu.:50.00000   3rd Qu.:0.0000000  
+ Max.   :74.000000   Max.   :50.000000   Max.   :12500.000   Max.   :98.00000   Max.   :1.0000000  
+> 
+> Correlation <- cor(transfusion)
+> 
+> corrplot(cor(transfusion))
+> #corrplot(Correlation, method="pie")
+> 
+> #Pre-Processing and Scaling
+> clean=!anyNA(transfusion)   #No NA values if Clean flag is True
+> 
+> preProcParam <- preProcess(transfusion[1:4], method = c("center", "scale"))
+> prtrain <- predict(preProcParam, transfusion[1:4])
+> prtrain <- cbind(prtrain,Donated)
+> 
+> 
+> summary(prtrain)
+ Recency (Months)     Frequency (times)    Blood Donated (cc)   Time (months)           Donated         
+ Min.   :-1.1743323   Min.   :-0.7731578   Min.   :-0.7731578   Min.   :-1.3243001   Min.   :0.0000000  
+ 1st Qu.:-0.8346330   1st Qu.:-0.6019046   1st Qu.:-0.6019046   1st Qu.:-0.7499815   1st Qu.:0.0000000  
+ Median :-0.3096432   Median :-0.2593982   Median :-0.2593982   Median :-0.2577085   Median :0.0000000  
+ Mean   : 0.0000000   Mean   : 0.0000000   Mean   : 0.0000000   Mean   : 0.0000000   Mean   :0.2379679  
+ 3rd Qu.: 0.5550458   3rd Qu.: 0.2543614   3rd Qu.: 0.2543614   3rd Qu.: 0.6447922   3rd Qu.:0.0000000  
+ Max.   : 7.9666663   Max.   : 7.6182487   Max.   : 7.6182487   Max.   : 2.6138844   Max.   :1.0000000  
+> 
+> #Sampling Train and Test Data
+> set.seed(44)
+> trainsamples<-sample(nrow(prtrain),0.7*nrow(prtrain))
+> trainx<-data.frame(prtrain[trainsamples,])
+> trainx
+    Recency..Months. Frequency..times. Blood.Donated..cc.  Time..months. Donated
+557   -0.55669725051     0.08310816804      0.08310816804 -0.25770846171       0
+212   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       0
+379    0.55504581993    -0.77315780574     -0.77315780574 -0.83202704248       0
+430    0.80209983558    -0.43065141623     -0.43065141623  0.23456460752       0
+24    -0.92727827399     0.08310816804      0.08310816804 -0.74998153094       1
+107   -1.17433228964     0.42561455756      0.42561455756  1.01399696714       0
+332    0.80209983558     0.08310816804      0.08310816804  0.02945082867       0
+43    -0.92727827399    -0.08814502671     -0.08814502671 -0.74998153094       1
+86    -0.92727827399     0.08310816804      0.08310816804 -0.25770846171       0
+742    1.66678889036     0.25436136280      0.25436136280  2.20365688444       0
+68    -1.17433228964    -0.60190461099     -0.60190461099 -1.24225460017       0
+1     -0.92727827399     7.61824873738      7.61824873738  2.61388444214       1
+604    0.55504581993     0.42561455756      0.42561455756 -0.33975397325       0
+109   -0.92727827399    -0.43065141623     -0.43065141623 -0.83202704248       0
+320    0.18446479645    -0.08814502671     -0.08814502671  0.27558736329       0
+133   -0.92727827399    -0.60190461099     -0.60190461099 -0.99611806556       0
+40    -0.68022425834     0.25436136280      0.25436136280 -0.50384499633       1
+318    0.55504581993    -0.25939822147     -0.25939822147 -0.33975397325       0
+148   -0.92727827399    -0.60190461099     -0.60190461099 -0.95509530979       0
+218   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       0
+467    1.66678889036    -0.25939822147     -0.25939822147  0.43967838637       0
+289    0.55504581993    -0.08814502671     -0.08814502671 -0.25770846171       1
+271    0.80209983558     0.93937414183      0.93937414183  0.23456460752       0
+354    0.18446479645    -0.60190461099     -0.60190461099 -0.54486775210       0
+169   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       0
+235    0.55504581993     0.25436136280      0.25436136280 -0.33975397325       0
+174   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       0
+558   -0.68022425834     0.08310816804      0.08310816804 -0.17566295017       0
+259   -0.68022425834    -0.43065141623     -0.43065141623 -0.25770846171       0
+587   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       1
+398    1.41973487471    -0.43065141623     -0.43065141623 -0.33975397325       0
+547   -0.30964323486     1.45313372610      1.45313372610  0.56274665367       0
+680    0.55504581993    -0.43065141623     -0.43065141623 -0.25770846171       0
+80    -0.92727827399    -0.60190461099     -0.60190461099 -1.24225460017       0
+58    -0.92727827399     0.25436136280      0.25436136280 -0.25770846171       1
+416    0.80209983558    -0.77315780574     -0.77315780574 -0.74998153094       0
+712    1.66678889036     0.08310816804      0.08310816804  0.43967838637       0
+239   -0.92727827399    -0.25939822147     -0.25939822147  0.35763287483       0
+629   -0.92727827399    -0.08814502671     -0.08814502671  1.17808799021       0
+340   -0.06258921921    -0.43065141623     -0.43065141623 -0.01157192710       0
+370    0.80209983558    -0.08814502671     -0.08814502671  0.23456460752       1
+222   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       1
+728    1.41973487471    -0.77315780574     -0.77315780574 -0.54486775210       0
+195   -0.92727827399    -0.60190461099     -0.60190461099 -0.83202704248       0
+125   -0.92727827399    -0.25939822147     -0.25939822147 -0.33975397325       0
+313    0.30799180427     0.59686775232      0.59686775232  1.05501972290       0
+180   -0.92727827399    -0.43065141623     -0.43065141623 -0.50384499633       0
+209    0.18446479645     0.08310816804      0.08310816804 -0.29873121748       0
+341    0.55504581993    -0.25939822147     -0.25939822147 -0.17566295017       0
+346    0.18446479645    -0.77315780574     -0.77315780574 -0.95509530979       0
+9     -0.92727827399     0.59686775232      0.59686775232 -0.50384499633       1
+50    -0.92727827399    -0.60190461099     -0.60190461099 -1.32430011171       0
+701    0.80209983558    -0.43065141623     -0.43065141623  0.02945082867       0
+470    0.18446479645    -0.60190461099     -0.60190461099  1.46524728060       0
+613   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       1
+393   -0.68022425834    -0.60190461099     -0.60190461099  1.01399696714       0
+648   -0.92727827399    -0.60190461099     -0.60190461099 -0.05259468286       0
+288   -0.06258921921    -0.60190461099     -0.60190461099 -0.74998153094       1
+396    0.80209983558     0.76812094707      0.76812094707  2.24467964021       0
+95     0.30799180427     0.93937414183      0.93937414183 -0.46282224056       0
+326    0.55504581993    -0.60190461099     -0.60190461099 -0.74998153094       0
+258    0.18446479645     0.25436136280      0.25436136280  0.11149634021       0
+653    0.55504581993    -0.25939822147     -0.25939822147 -0.33975397325       0
+739    1.66678889036    -0.77315780574     -0.77315780574 -0.46282224056       0
+632   -0.92727827399    -0.60190461099     -0.60190461099 -0.50384499633       0
+643    0.18446479645     0.08310816804      0.08310816804  0.27558736329       0
+52    -0.92727827399     0.93937414183      0.93937414183  0.48070114214       1
+411    0.80209983558    -0.77315780574     -0.77315780574 -0.74998153094       0
+375    0.55504581993    -0.25939822147     -0.25939822147  0.23456460752       0
+649    0.18446479645    -0.43065141623     -0.43065141623 -0.46282224056       0
+509   -0.92727827399     2.65190608941      2.65190608941  0.72683767675       1
+18    -0.92727827399     1.62438692086      1.62438692086  0.60376940944       1
+368    0.55504581993    -0.25939822147     -0.25939822147  0.15251909598       0
+299    0.55504581993    -0.60190461099     -0.60190461099 -0.83202704248       0
+367    1.66678889036     1.62438692086      1.62438692086  0.93195145560       0
+337    0.18446479645    -0.43065141623     -0.43065141623 -0.25770846171       0
+294    0.18446479645    -0.08814502671     -0.08814502671  0.02945082867       0
+101   -0.68022425834     0.42561455756      0.42561455756 -0.01157192710       1
+282    0.55504581993    -0.25939822147     -0.25939822147 -0.50384499633       1
+657   -0.68022425834    -0.60190461099     -0.60190461099 -0.13464019440       0
+691    0.55504581993    -0.77315780574     -0.77315780574 -0.83202704248       0
+494    1.66678889036    -0.43065141623     -0.43065141623  2.24467964021       0
+245   -0.06258921921    -0.60190461099     -0.60190461099 -0.95509530979       0
+178   -0.68022425834    -0.08814502671     -0.08814502671 -0.05259468286       1
+675    0.80209983558     0.76812094707      0.76812094707  1.13706523444       0
+134   -0.68022425834     0.08310816804      0.08310816804  0.02945082867       0
+554   -0.92727827399    -0.43065141623     -0.43065141623 -0.83202704248       0
+685    0.80209983558    -0.25939822147     -0.25939822147 -0.05259468286       0
+656    0.80209983558     1.79564011562      1.79564011562  1.75240657098       0
+601   -0.92727827399    -0.60190461099     -0.60190461099 -0.83202704248       0
+193   -0.92727827399    -0.25939822147     -0.25939822147  0.02945082867       0
+172   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       0
+273   -0.30964323486    -0.60190461099     -0.60190461099 -0.74998153094       0
+401    1.04915385123    -0.60190461099     -0.60190461099 -0.46282224056       0
+208   -0.92727827399     0.25436136280      0.25436136280  1.71138381521       0
+266   -0.68022425834    -0.25939822147     -0.25939822147  0.35763287483       1
+635    0.43151881210    -0.43065141623     -0.43065141623 -0.74998153094       0
+539   -0.92727827399     0.42561455756      0.42561455756  0.15251909598       1
+110   -0.92727827399     0.76812094707      0.76812094707  1.21911074598       0
+234    0.06093778862     0.42561455756      0.42561455756  0.19354185175       0
+3     -1.05080528182     1.79564011562      1.79564011562  0.02945082867       1
+465    1.41973487471    -0.77315780574     -0.77315780574 -0.54486775210       0
+718    1.41973487471    -0.43065141623     -0.43065141623  0.02945082867       0
+617   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       0
+698    0.55504581993    -0.43065141623     -0.43065141623  0.02945082867       0
+325    0.80209983558     0.25436136280      0.25436136280  0.15251909598       0
+697    0.55504581993    -0.43065141623     -0.43065141623  0.02945082867       0
+382    0.55504581993    -0.77315780574     -0.77315780574 -0.83202704248       0
+659    0.18446479645    -0.43065141623     -0.43065141623 -0.33975397325       0
+70    -1.05080528182     0.59686775232      0.59686775232  0.68581492098       0
+748    7.71961227386    -0.77315780574     -0.77315780574  1.54729279214       0
+249    0.18446479645    -0.60190461099     -0.60190461099 -0.95509530979       0
+460    1.41973487471    -0.77315780574     -0.77315780574 -0.54486775210       0
+117   -0.92727827399     0.25436136280      0.25436136280  0.48070114214       1
+8     -1.05080528182     1.11062733659      1.11062733659  0.02945082867       0
+708    0.18446479645    -0.25939822147     -0.25939822147  1.62933830367       0
+183   -0.92727827399    -0.25939822147     -0.25939822147  0.02945082867       0
+120   -0.92727827399     0.93937414183      0.93937414183  1.83445208252       1
+25    -0.06258921921     0.59686775232      0.59686775232 -0.74998153094       0
+429    1.66678889036    -0.43065141623     -0.43065141623 -0.25770846171       0
+531   -0.68022425834    -0.08814502671     -0.08814502671 -0.74998153094       1
+37    -0.92727827399     1.11062733659      1.11062733659  0.52172389790       1
+155   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       0
+267   -0.80375126617    -0.60190461099     -0.60190461099 -0.46282224056       0
+4     -0.92727827399     2.48065289465      2.48065289465  0.43967838637       1
+171   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       0
+491    0.80209983558    -0.60190461099     -0.60190461099  1.46524728060       0
+523   -0.68022425834     1.28188053135      1.28188053135  0.19354185175       1
+578   -0.06258921921     0.59686775232      0.59686775232  0.15251909598       0
+200   -0.06258921921     0.59686775232      0.59686775232  0.43967838637       0
+151   -0.92727827399     0.25436136280      0.25436136280  0.97297421137       1
+255    0.30799180427     1.28188053135      1.28188053135  1.01399696714       0
+231   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       0
+92    -0.68022425834    -0.60190461099     -0.60190461099 -1.24225460017       0
+353    0.18446479645    -0.08814502671     -0.08814502671  0.64479216521       0
+176    0.18446479645     0.76812094707      0.76812094707  0.02945082867       0
+189   -0.18611622703     1.62438692086      1.62438692086  1.75240657098       0
+663    0.80209983558    -0.43065141623     -0.43065141623 -0.54486775210       0
+530   -0.92727827399     0.08310816804      0.08310816804 -0.50384499633       1
+376    0.18446479645    -0.43065141623     -0.43065141623  0.23456460752       1
+405    0.55504581993    -0.08814502671     -0.08814502671  1.21911074598       0
+662    0.80209983558    -0.60190461099     -0.60190461099 -0.74998153094       0
+55    -0.68022425834    -0.08814502671     -0.08814502671 -0.83202704248       1
+588   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       0
+715    0.80209983558    -0.25939822147     -0.25939822147  0.97297421137       0
+76    -0.92727827399    -0.60190461099     -0.60190461099 -1.24225460017       1
+314   -0.06258921921    -0.77315780574     -0.77315780574 -1.03714082133       0
+501   -0.92727827399     6.41947637408      6.41947637408  2.12161137290       1
+462    1.41973487471    -0.77315780574     -0.77315780574 -0.54486775210       0
+574   -0.92727827399    -0.60190461099     -0.60190461099 -0.95509530979       0
+154   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       1
+181   -0.68022425834    -0.25939822147     -0.25939822147 -0.33975397325       1
+192   -0.68022425834     0.25436136280      0.25436136280  0.72683767675       0
+236   -0.18611622703     0.76812094707      0.76812094707  1.17808799021       0
+182    0.06093778862    -0.25939822147     -0.25939822147 -0.74998153094       0
+391    0.18446479645    -0.25939822147     -0.25939822147  0.97297421137       0
+26    -0.68022425834     1.45313372610      1.45313372610  0.23456460752       0
+440    1.04915385123     0.42561455756      0.42561455756  2.49081617483       0
+505   -1.17433228964     3.50817206320      3.50817206320  1.71138381521       1
+131   -0.68022425834    -0.08814502671     -0.08814502671 -0.25770846171       0
+350    0.18446479645    -0.77315780574     -0.77315780574 -0.95509530979       0
+650    0.55504581993     0.42561455756      0.42561455756  0.48070114214       0
+361    0.55504581993     0.08310816804      0.08310816804  0.68581492098       0
+562   -0.68022425834     0.59686775232      0.59686775232  0.72683767675       0
+737    1.66678889036    -0.77315780574     -0.77315780574 -0.46282224056       0
+565   -0.68022425834     1.45313372610      1.45313372610  2.12161137290       0
+88    -0.68022425834    -0.60190461099     -0.60190461099 -1.24225460017       0
+681    1.29620786689     1.45313372610      1.45313372610  1.42422452483       1
+438    0.55504581993    -0.43065141623     -0.43065141623  0.72683767675       0
+188   -0.68022425834    -0.25939822147     -0.25939822147 -0.33975397325       0
+427    1.66678889036    -0.60190461099     -0.60190461099 -0.46282224056       0
+238   -0.68022425834    -0.60190461099     -0.60190461099 -0.83202704248       0
+127   -0.68022425834     0.42561455756      0.42561455756  0.48070114214       1
+164   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       1
+598   -0.68022425834     0.08310816804      0.08310816804  0.35763287483       0
+349    0.18446479645    -0.77315780574     -0.77315780574 -0.95509530979       0
+385    0.55504581993    -0.77315780574     -0.77315780574 -0.83202704248       0
+378    0.55504581993    -0.77315780574     -0.77315780574 -0.83202704248       0
+351    0.18446479645    -0.77315780574     -0.77315780574 -0.95509530979       0
+747    3.64322101559    -0.77315780574     -0.77315780574  0.19354185175       0
+500    7.96666628951    -0.77315780574     -0.77315780574  1.62933830367       0
+91    -0.68022425834    -0.60190461099     -0.60190461099 -1.24225460017       1
+628    0.18446479645    -0.60190461099     -0.60190461099 -0.95509530979       0
+159   -0.92727827399    -0.77315780574     -0.77315780574 -1.32430011171       0
+126   -0.92727827399    -0.08814502671     -0.08814502671 -0.01157192710       0
+561   -0.68022425834     0.93937414183      0.93937414183  1.21911074598       1
+317    0.18446479645    -0.60190461099     -0.60190461099 -0.70895877517       0
+177    0.18446479645    -0.25939822147     -0.25939822147 -0.74998153094       1
+119   -1.05080528182     0.25436136280      0.25436136280  0.93195145560       0
+621   -0.68022425834     0.25436136280      0.25436136280  1.13706523444       0
+666    0.18446479645    -0.77315780574     -0.77315780574 -0.95509530979       0
+397    1.41973487471    -0.60190461099     -0.60190461099 -0.54486775210       1
+31    -1.05080528182     1.45313372610      1.45313372610  0.97297421137       0
+323    0.18446479645    -0.25939822147     -0.25939822147 -0.01157192710       0
+224   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       0
+211   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       0
+390    0.55504581993     0.25436136280      0.25436136280  1.58831554790       0
+610   -0.68022425834    -0.77315780574     -0.77315780574 -1.24225460017       0
+194    0.18446479645     0.93937414183      0.93937414183  0.31661011906       0
+528   -0.92727827399     1.62438692086      1.62438692086  1.21911074598       0
+ [ reached getOption("max.print") -- omitted 323 rows ]
+> testx<-data.frame(prtrain[-trainsamples,])
+> 
+> train <- data.frame(trainx[1:2],trainx[4:5])
+> test <- data.frame(testx[1:2],testx[4:5])
+> 
+> totaldata=prtrain[-3]
+> corrplot(cor(train))
+> 
+> #Seperate X and Y
+> x <- train[1:3]
+> y <- factor(train$Donated)
+> 
+> #Control for Cross Validation parameter is 10 i.e. K-10
+> 
+> ctrl=trainControl(method='cv',number=10)
+> 
+> #Writing Formula as default formula doesnt work with neuralnet package
+> n <- names(train)
+> f <- as.formula(paste("Donated ~", paste(n[!n %in% "Donated"], collapse = " + ")))    
+> 
+> #Decision Tree Model
+> decisionTree(train, test)
+> # Perceptron
+> 
+> #Neural Net
+> neuralNetwork(train,test)
+> #Deep Network
+> DeepNetwork(train,test)
+Warning message:
+In confusionMatrix.default(predict.deep.vals, test$Donated) :
+  Levels are not in the same order for reference and data. Refactoring data to match.
+> #SVM
+> SVM(train,test)
+> # Logistic Regression
+> logisticRegression(train,test)
+> # Bagging
+> baggingT(train,test)
+> 
+> # Janu
+> 
+> prtrain <- train
+> prtest <- test
+> Donated <-prtrain[4]
+> 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 449, 448 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7711838624  0.2628685419
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 606, 606, 605, 606, 606, 606, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  1     0.7741000878  0.2826884708
+  3     0.7365013169  0.1960729865
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 485  28
+         1  79  81
+
+Train Error: 0.159 
+
+Out-Of-Bag Error:  0.166  iteration= 95 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        96        100 
+
+Stochastic Gradient Boosting 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 605, 606, 606, 606, 606, 606, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7840144199  0.2903356855
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+674 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 448, 450, 450 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7582306153  0.3122221502
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+674 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 450, 450, 448 
+Resampling results:
+
+  Accuracy    Kappa       
+  0.77450748  0.2695375471
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+674 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 607, 606, 606, 607, 606, 607, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  2     0.7339212929  0.1961484810
+  3     0.7230999733  0.1818753129
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 2. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 482  29
+         1  79  84
+
+Train Error: 0.16 
+
+Out-Of-Bag Error:  0.177  iteration= 97 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        98         98 
+
+Stochastic Gradient Boosting 
+
+674 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 607, 606, 607, 607, 606, 607, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7857490622  0.2886340053
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+674 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 450, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7462632275  0.2754621424
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+674 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 450, 449, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7641005291  0.2581771115
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+674 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 607, 607, 606, 607, 606, 607, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  1     0.7690197775  0.2601228796
+  2     0.7368932193  0.1918393756
+  3     0.7279747893  0.1975499472
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 483  29
+         1  81  81
+
+Train Error: 0.163 
+
+Out-Of-Bag Error:  0.171  iteration= 65 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        74         77 
+
+Stochastic Gradient Boosting 
+
+674 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 606, 607, 607, 607, 607, 606, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7855234985  0.2996766462
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 449, 448 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7503769841  0.3266611225
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 450, 448, 448 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7726689919  0.2175462297
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 606, 606, 606, 605, 605, 605, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  1     0.7661259212  0.2260105280
+  2     0.7379721269  0.1759135445
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 487  28
+         1  87  71
+
+Train Error: 0.171 
+
+Out-Of-Bag Error:  0.174  iteration= 80 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        93         93 
+
+Stochastic Gradient Boosting 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 605, 607, 605, 605, 605, 606, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7830776639  0.2632228572
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 448, 449, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7533928571  0.2865737405
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 449, 448 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7741071429  0.2683519646
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 605, 605, 606, 606, 606, 606, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7568188469  0.2364005384
+
+Tuning parameter 'mtry' was held constant at a value of 1
+ 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 486  25
+         1  89  73
+
+Train Error: 0.169 
+
+Out-Of-Bag Error:  0.181  iteration= 38 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+       100        100 
+
+Stochastic Gradient Boosting 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 606, 606, 606, 605, 606, 606, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7799493677  0.2756964672
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 448, 449, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7548611111  0.2783909785
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 448, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7786044974  0.3168282694
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 606, 606, 606, 605, 605, 605, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  1     0.7518328589  0.2119934233
+  3     0.7300591517  0.1952877841
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 476  32
+         1  85  80
+
+Train Error: 0.174 
+
+Out-Of-Bag Error:  0.177  iteration= 83 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        98         98 
+
+Stochastic Gradient Boosting 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 606, 605, 606, 605, 606, 605, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7746364193  0.2645466884
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 448, 449, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7519179894  0.3103780461
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 449, 448 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7904563492  0.3127685855
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 606, 605, 606, 606, 606, 606, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  2     0.7459247878  0.2295863843
+  3     0.7380011706  0.2175897490
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 2. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 490  21
+         1  83  79
+
+Train Error: 0.155 
+
+Out-Of-Bag Error:  0.163  iteration= 96 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        97         97 
+
+Stochastic Gradient Boosting 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 606, 606, 605, 605, 605, 606, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7885404509  0.3136886824
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 448, 449, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7473941799  0.2744657687
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 448, 449, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7845304233  0.2696649343
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 606, 605, 606, 605, 606, 605, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  1     0.7718260303  0.2377120802
+  3     0.7421209461  0.2118579222
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 490  26
+         1  81  76
+
+Train Error: 0.159 
+
+Out-Of-Bag Error:  0.178  iteration= 92 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        91         91 
+
+Stochastic Gradient Boosting 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 606, 607, 606, 606, 606, 605, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7877788984  0.2702428073
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 449, 448 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7489351852  0.3309432104
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 450, 448, 448 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7800365388  0.2884306611
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 606, 606, 606, 605, 605, 605, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  1     0.7805311677  0.2831603098
+  2     0.7572352143  0.2491343057
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 492  23
+         1  79  79
+
+Train Error: 0.152 
+
+Out-Of-Bag Error:  0.152  iteration= 82 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        94         94 
+
+Stochastic Gradient Boosting 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 606, 605, 606, 605, 605, 607, ... 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7839484114  0.2768758644
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+[1] "1"
+[1] 2
+[1] 3
+[1] 4
+Naive Bayes 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 449, 448 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7652777778  0.3212955909
+
+Tuning parameter 'fL' was held constant at a value of 1
+Tuning parameter 'usekernel' was held constant at a value of
+ TRUE
+Tuning parameter 'adjust' was held constant at a value of TRUE
+ 
+[1] 5
+k-Nearest Neighbors 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (3 fold, repeated 1 times) 
+Summary of sample sizes: 449, 448, 449 
+Resampling results:
+
+  Accuracy      Kappa       
+  0.7860648148  0.2722460447
+
+Tuning parameter 'k' was held constant at a value of 10
+ 
+[1] 6
+Random Forest 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 3 times) 
+Summary of sample sizes: 605, 605, 605, 606, 606, 605, ... 
+Resampling results across tuning parameters:
+
+  mtry  Accuracy      Kappa       
+  1     0.7826014757  0.2647924384
+  3     0.7465599808  0.1923697708
+
+Accuracy was used to select the optimal model using  the largest value.
+The final value used for the model was mtry = 1. 
+Call:
+ada(x, y = y, iter = 100, control = rpart.control(maxdepth = 30, 
+    cp = 0.001, minsplit = 20, xval = 10))
+
+Loss: exponential Method: discrete   Iteration: 100 
+
+Final Confusion Matrix for Data:
+          Final Prediction
+True value   0   1
+         0 489  29
+         1  80  75
+
+Train Error: 0.162 
+
+Out-Of-Bag Error:  0.168  iteration= 95 
+
+Additional Estimates of number of iterations:
+
+train.err1 train.kap1 
+        73         81 
+
+Stochastic Gradient Boosting 
+
+673 samples
+  3 predictor
+  2 classes: '0', '1' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold, repeated 33 times) 
+Summary of sample sizes: 605, 606, 606, 605, 605, 605, ... 
+Resampling results:
+
+  Accuracy     Kappa       
+  0.784236289  0.2549686571
+
+Tuning parameter 'n.trees' was held constant at a value of 300
+Tuning parameter 'interaction.depth' was held constant
+ at a value of 1
+Tuning parameter 'shrinkage' was held constant at a value of 0.1
+Tuning parameter 'n.minobsinnode'
+ was held constant at a value of 10
+ 
+> 
+> 
+> 
+> #Average Means
+> 
+> sum(accuracytree$Accuracy) / numofFolds
+[1] 77.81441441
+> sum(accuracyperceptron$Accuracy) / numofFolds
+[1] 77.81981982
+> sum(accuracyNeural$Accuracy) / numofFolds
+[1] 64.84684685
+> sum(accuracyDeep$Accuracy) / numofFolds
+[1] 67.65225225
+> sum(accuracySVM$Accuracy) / numofFolds
+[1] 76.21081081
+> sum(accuracynaive$Accuracy) / numofFolds
+[1] 75.67387387
+> sum(accuracylreg$Accuracy) / numofFolds
+[1] 77.54954955
+> sum(accuracyknn$Accuracy) / numofFolds
+[1] 79.15315315
+> sum(accuracyBag$Accuracy) / numofFolds
+[1] 78.88108108
+> sum(accuracyrf$Accuracy) / numofFolds
+[1] 76.07567568
+> sum(accuracyada$Accuracy) / numofFolds
+[1] 77.14234234
+> sum(accuracygb$Accuracy) / numofFolds
+[1] 78.74954955
+> 
+> 
+> sum(accuracytree$AUC) / numofFolds
+[1] 0.6282160471
+> sum(accuracyperceptron$AUC) / numofFolds
+[1] 0.6403659185
+> sum(accuracyNeural$AUC) / numofFolds
+[1] 0.6688628791
+> sum(accuracyDeep$AUC) / numofFolds
+[1] 0.678429652
+> sum(accuracySVM$AUC) / numofFolds
+[1] 0.5
+> sum(accuracynaive$AUC) / numofFolds
+[1] 0.6591848925
+> sum(accuracylreg$AUC) / numofFolds
+[1] 0.5543634738
+> sum(accuracyknn$AUC) / numofFolds
+[1] 0.6295054193
+> sum(accuracyBag$AUC) / numofFolds
+[1] 0.635467218
+> sum(accuracyrf$AUC) / numofFolds
+[1] 0.5967955583
+> sum(accuracyada$AUC) / numofFolds
+[1] 0.6285343704
+> sum(accuracygb$AUC) / numofFolds
+[1] 0.6271291479
